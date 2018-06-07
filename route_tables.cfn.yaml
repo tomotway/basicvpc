@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Route tables
+Parameters:
+  VPCStackName:
+    Description: Name of the active VPC stack
+    Type: String
+    MinLength: 1
+    MaxLength: 255
+    AllowedPattern: '^[a-zA-Z][-a-zA-Z0-9]*$'
+    Default: vpc01
+Resources:
+  PrivateRouteTableA:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !ImportValue 
+        'Fn::Sub': '${VPCStackName}-VPCID'
+      Tags:
+        - Key: Application
+          Value: !Ref 'AWS::StackName'
+        - Key: Network
+          Value: Private
+  PrivateRouteTableB:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !ImportValue 
+        'Fn::Sub': '${VPCStackName}-VPCID'
+      Tags:
+        - Key: Application
+          Value: !Ref 'AWS::StackName'
+        - Key: Network
+          Value: Private
+  PublicRouteTableA:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !ImportValue 
+        'Fn::Sub': '${VPCStackName}-VPCID'
+      Tags:
+        - Key: Application
+          Value: !Ref 'AWS::StackName'
+        - Key: Network
+          Value: Public
+  PublicRouteTableB:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !ImportValue 
+        'Fn::Sub': '${VPCStackName}-VPCID'
+      Tags:
+        - Key: Application
+          Value: !Ref 'AWS::StackName'
+        - Key: Network
+          Value: Public
+Outputs:
+  PrivateRouteTableA:
+    Description: PrivateRouteTableA
+    Value: !Ref PrivateRouteTableA
+    Export:
+      Name: !Sub '${AWS::StackName}-PrivateRouteTableA'
+  PrivateRouteTableB:
+    Description: PrivateRouteTableB
+    Value: !Ref PrivateRouteTableB
+    Export:
+      Name: !Sub '${AWS::StackName}-PrivateRouteTableB'
+  PublicRouteTableA:
+    Description: PublicRouteTableA
+    Value: !Ref PublicRouteTableA
+    Export:
+      Name: !Sub '${AWS::StackName}-PublicRouteTableA'
+  PublicRouteTableB:
+    Description: PublicRouteTableB
+    Value: !Ref PublicRouteTableB
+    Export:
+      Name: !Sub '${AWS::StackName}-PublicRouteTableB'
+
